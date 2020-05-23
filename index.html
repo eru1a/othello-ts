@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Othello</title>
+    <style>
+      body {
+        width: 100%;
+      }
+
+      #main_wrapper {
+        position: relative;
+      }
+
+      #canvas_wrapper {
+        margin: auto;
+        max-width: 320px;
+        max-height: 320px;
+      }
+
+      #gameInfo_wrapper {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main_wrapper">
+      <div id="canvas_wrapper">
+        <canvas id="canvas" width="320" height="320"> </canvas>
+      </div>
+      <div id="gameInfo_wrapper">
+        <div class="gameInfo" id="turn">手番: 黒</div>
+        <div class="gameInfo" id="score">スコア: (2, 2)</div>
+        <div class="gameInfo" id="gameResult">試合結果: プレイ中</div>
+      </div>
+    </div>
+    <script src="./dist/index.js"></script>
+  </body>
+</html>
