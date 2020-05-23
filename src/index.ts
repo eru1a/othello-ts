@@ -1,6 +1,7 @@
 import { Color, colorToString } from "./color";
 import { Board } from "./board";
 import { gameResultToString } from "./gameResult";
+import { Ai } from "./ai";
 
 const HEIGHT = 320;
 const WIDTH = 320;
@@ -10,11 +11,13 @@ class App {
   private board: Board;
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
+  private playerTurn: Color;
 
   constructor() {
     this.board = new Board();
     this.canvas = <HTMLCanvasElement>document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d")!;
+    this.playerTurn = Math.random() > 0.5 ? Color.Black : Color.White;
 
     this.canvas.addEventListener("mousedown", (e) => this.put(e));
   }
@@ -23,11 +26,19 @@ class App {
     if (e.button !== 0) {
       return;
     }
+    if (this.board.turn !== this.playerTurn) {
+      return;
+    }
 
     const x = Math.floor(e.offsetX / CELL_SIZE);
     const y = Math.floor(e.offsetY / CELL_SIZE);
     this.board.put(x, y);
     this.update();
+  }
+
+  private aiMove() {
+    const [x, y] = Ai.search(this.board);
+    this.board.put(x, y);
   }
 
   private drawBoard() {
@@ -77,7 +88,7 @@ class App {
     this.drawBoard();
     document.getElementById("turn")!.innerHTML = `手番: ${colorToString(
       this.board.turn
-    )}`;
+    )}(${this.board.turn === this.playerTurn ? "あなた" : "AI"})`;
     const [black, white] = this.board.score();
     document.getElementById(
       "score"
@@ -85,6 +96,11 @@ class App {
     document.getElementById(
       "gameResult"
     )!.innerHTML = `試合結果: ${gameResultToString(this.board.gameResult)}`;
+
+    if (!this.board.isGameOver() && this.board.turn !== this.playerTurn) {
+      this.aiMove();
+      this.update();
+    }
   }
 }
 

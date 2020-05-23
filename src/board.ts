@@ -77,7 +77,9 @@ export class Board {
     const legalMoves: Move[] = [];
     for (let y = 0; y < 8; y++) {
       for (let x = 0; x < 8; x++) {
-        legalMoves.push(...this.flipCells(x, y));
+        if (this.flipCells(x, y).length > 0) {
+          legalMoves.push([x, y]);
+        }
       }
     }
     return legalMoves;
@@ -101,7 +103,7 @@ export class Board {
     this.turn = colorInv(this.turn);
 
     // パスをする
-    if (this.passIfNeeded() || this.passIfNeeded()) {
+    if (this.passIfNeeded() && this.passIfNeeded()) {
       // 2連続なら試合終了
       const [black, white] = this.score();
       if (black > white) {
@@ -144,5 +146,9 @@ export class Board {
       }
     }
     return [black, white];
+  }
+
+  isGameOver(): boolean {
+    return this.gameResult !== GameResult.Playing;
   }
 }
