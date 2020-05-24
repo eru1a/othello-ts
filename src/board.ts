@@ -23,6 +23,19 @@ export class Board {
     this.gameResult = GameResult.Playing;
   }
 
+  /** 複製 */
+  clone(): Board {
+    const b = new Board();
+    for (let y = 0; y < 8; y++) {
+      for (let x = 0; x < 8; x++) {
+        b.board[y][x] = this.board[y][x];
+      }
+    }
+    b.turn = this.turn;
+    b.gameResult = this.gameResult;
+    return b;
+  }
+
   getColor(x: number, y: number): Color {
     return this.board[y][x];
   }
